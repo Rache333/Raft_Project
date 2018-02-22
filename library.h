@@ -54,7 +54,7 @@ typedef struct election_votes {
 } election_vote_t;
 
 typedef struct appendentries_msgs {
-    int term;
+    int msg_term;
     int msg_id;
     msg_type_t msg_type;
     char key[50];
@@ -62,8 +62,9 @@ typedef struct appendentries_msgs {
 } appendentries_msg_t;
 
 typedef struct appendentries_msg_acks {
-    int term;
+    int msg_term;
     int msg_id;
+    int my_term;
 } appendentries_msg_ack_t;
 
 void init();
