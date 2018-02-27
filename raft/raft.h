@@ -1,5 +1,7 @@
 #ifndef RAFT_LIBRARY_H
 #define RAFT_LIBRARY_H
+#include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/socket.h>
@@ -17,6 +19,7 @@
 #define STATE_N ((LEADER) + (1))
 #define EVENT_N ((LOG_UPDATE) + (1))
 #define MSG_TYPES_N ((COMMIT) + (1))
+#define MSG_SIZE 1024
 
 typedef enum states {
     FOLLOWER = 0,
@@ -57,7 +60,7 @@ typedef struct node_modes {
     int vote_count;
 } node_mode_t;
 
-typedef state_t (*event_handler_t)(node_mode_t *);
+typedef void (*event_handler_t)(void *);
 
 typedef struct election_vote_reqs {
     int candidate_id;
@@ -83,7 +86,7 @@ typedef struct appendentries_msg_acks {
 } appendentries_msg_ack_t;
 
 static node_mode_t self;
-void init();
+void run(delete_callback_t, edit_callback_t);
 void node_init(node_mode_t *);
 void join_multicast();
 state_t log_update_handler(node_mode_t *);
