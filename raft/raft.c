@@ -3,7 +3,7 @@
 #include <time.h>
 
 static event_handler_t event_handlers[STATE_N][EVENT_N] = {
-        [LEADER][LOG_UPDATE] = handle_log_update
+        [LEADER][LOG_UPDATE] = log_update_handler
 };
 
 
@@ -27,6 +27,8 @@ void node_init(node_mode_t * node_mode) {
 void join_multicast() {
 
 }
-state_t handle_log_update(node_mode_t * node_mode) {
+
+
+state_t log_update_handler(node_mode_t * node_mode) {
 
 }
