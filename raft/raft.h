@@ -6,6 +6,10 @@
 #include "election.h"
 #include "logreplication.h"
 #include "logupdatecommands.h"
+#include <fcntl.h>           /* For O_* constants */
+#include <sys/stat.h>        /* For mode constants */
+#include <mqueue.h>
+
 
 #define NODE_N 4
 #define MAJORITY 3
@@ -69,7 +73,7 @@ typedef struct appendentries_msgs {
     int msg_id;
     msg_type_t msg_type;
     char key[50];
-    char data[50];
+    char value[50];
 } appendentries_msg_t;
 
 typedef struct appendentries_msg_acks {
@@ -82,7 +86,7 @@ static node_mode_t self;
 void init();
 void node_init(node_mode_t *);
 void join_multicast();
-state_t handle_log_update(node_mode_t *);
+state_t log_update_handler(node_mode_t *);
 void send_appendentries(struct appendentries_msg);
 void commit(struct appendentries_msg, int accepted);
 #endif
