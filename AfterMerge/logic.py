@@ -1,5 +1,7 @@
 import dal
 import ctypes
+#import threading
+import os
 
 _raft = ctypes.CDLL("./libraft.so")
 
@@ -7,16 +9,13 @@ _raft.edit_cmd.argtypes = [ctypes.c_char_p, ctypes.c_char_p]
 _raft.delete_cmd.argtypes = [ctypes.c_char_p]
 _raft.show_node_status.argtypes = []
 _raft.show_system_status.argtypes = []
-_raft.run.argtypes = []
+_raft.init.argtypes = []
+_raft.show_log.argtypes = []
+_raft.stam.argtypes = []
 
 
 callback_type_edit = ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p)
 callback_type_delete = ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_char_p)
-
-
-def initToC():
-    _raft.run(callback_func_delete, callback_func_edit)
-
 
 def editValToC(key, value):
     print("Logic: edit value of {0} to be {1}".format(key, value))
@@ -43,6 +42,11 @@ def deleteValToDal(key):
 
 callback_func_delete = callback_type_delete(deleteValToDal)
 
+
+def initToC():
+    _raft.init(callback_func_delete, callback_func_edit)
+
+
 def showNodeStatus():
     nodeStatus = _raft.show_node_status()
     print("The node status are: ")
@@ -54,7 +58,7 @@ def showNodeStatus():
         print("Leader")
 
 def showSysStatus():
-    pass
+    _raft.show_system_status()
 
 def showLog():
-    pass
+    _raft.show_log()

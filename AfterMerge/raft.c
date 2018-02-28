@@ -2,21 +2,39 @@
 #include <stdio.h>
 #include <time.h>
 #include <sys/time.h>
+#include <unistd.h>
+
+static pthread_t t1;
 
 static event_handler_t event_handlers[STATE_N][EVENT_N] = {
         [LEADER][LOG_UPDATE] = log_update_handler
 };
-delete_callback_t delete_callback;
-edit_callback_t edit_callback;
+
+callback_types_t callback_type;
 
 
-void run(delete_callback_t delete, edit_callback_t edit) {
-    delete_callback = delete;
-    edit_callback = edit;
+void run(void * a) {
+
+    printf("hello from c proc num: %d\n", getpid());
+    fflush(stdout);
+    printf("%d, %d\n", (int)callback_type._delete, (int)callback_type._edit);
+
     time_t t;
     srand((unsigned)time(&t));
     node_init(& self);
     join_multicast();
+
+
+}
+
+void init(delete_callback_t _delete1, edit_callback_t _edit1) {
+
+    callback_type._delete = _delete1;
+    callback_type._edit = _edit1;
+    printf("%d, %d\n", (int)callback_type._delete, (int)callback_type._edit);
+    pthread_create(&t1,NULL, &run,NULL);
+    puts("hi");
+    sleep(3);
 
 }
 
@@ -30,7 +48,7 @@ void node_init(node_mode_t * node_mode) {
 
 
 void join_multicast() {
-
+    puts("hi from the other thread");
 }
 
 

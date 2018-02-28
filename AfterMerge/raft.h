@@ -11,6 +11,9 @@
 #include <fcntl.h>           /* For O_* constants */
 #include <sys/stat.h>        /* For mode constants */
 #include <mqueue.h>
+#include <sys/types.h>
+#include <sys/syscall.h>
+#include <pthread.h>
 
 
 #define NODE_N 4
@@ -20,6 +23,9 @@
 #define EVENT_N ((LOG_UPDATE) + (1))
 #define MSG_TYPES_N ((COMMIT) + (1))
 #define MSG_SIZE 1024
+
+typedef void (* delete_callback_t)(char * key);
+typedef void (* edit_callback_t)(char * key, char * value);
 
 typedef enum states {
     FOLLOWER = 0,
@@ -85,8 +91,13 @@ typedef struct appendentries_msg_acks {
     int my_term;
 } appendentries_msg_ack_t;
 
+typedef struct callback_types {
+    delete_callback_t _delete;
+    edit_callback_t _edit;
+} callback_types_t;
+
 static node_mode_t self;
-void run(delete_callback_t, edit_callback_t);
+void run(void *);
 void node_init(node_mode_t *);
 void join_multicast();
 state_t log_update_handler(node_mode_t *);
