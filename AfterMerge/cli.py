@@ -89,7 +89,7 @@ def input_loop():
         elif line == 'show log':
             logic.showLog()
 
-        elif line.startswith("log value add"):
+        elif line.startswith("log value add "):
             line = line[14:]
             key, value = line.split(' ')
             if logic.editValToC(key, value) == -1:
@@ -97,7 +97,7 @@ def input_loop():
             else:
                 print("Adding {0} {1} to the DB ... ".format(key, value))
 
-        elif line.startswith("log value delete"):
+        elif line.startswith("log value delete "):
             line = line[17:]
             line = line.split(' ')[0]
             if logic.deleteValToC(line) == -1:
@@ -105,7 +105,7 @@ def input_loop():
             else:
                 print("Removing {0} from the DB ... ".format(line))
 
-        elif line.startswith("log value edit"):
+        elif line.startswith("log value edit "):
             line = line[15:]
             key, value = line.split(' ')
             if logic.editValToC(key, value) == -1:
