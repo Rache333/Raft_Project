@@ -16,6 +16,7 @@
 #include <pthread.h>
 #include <string.h>
 #include <errno.h>
+#include <netinet/in.h>
 
 
 #define NODE_N 4
@@ -26,6 +27,7 @@
 #define MSG_TYPES_N ((COMMIT) + (1))
 #define MSG_SIZE 1024
 #define BFRSIZE 512
+#define RAFT_MSG_SIZE 10
 
 typedef void (* delete_callback_t)(char * key);
 typedef void (* edit_callback_t)(char * key, char * value);
@@ -62,11 +64,40 @@ typedef enum events {
     LOG_UPDATE
 } event_t;
 
+//typedef struct node_modes {
+//    state_t node_state;
+//    int term;
+//    int election_timer_interval;
+//    int vote_count;
+//} node_mode_t;
+
+typedef struct log_entries
+{
+    int term;
+    msg_type_t type;
+    char key[50];
+    char value[50];
+    int has_commited;
+} log_entry_t;
+
 typedef struct node_modes {
     state_t node_state;
-    int term;
+    unsigned int term;
     int election_timer_interval;
+
     int vote_count;
+
+    /* for ipc udp multi-cast rafts communication */
+    int sender_sock_fd;
+    struct sockaddr_in s_addr;
+    int listener_sock_fd;
+    struct sockaddr_in l_addr;
+
+    /* to maintain log */
+    log_entry_t log[1000];
+    int log_len;
+    int log_num_of_committed;
+
 } node_mode_t;
 
 typedef void (*event_handler_t)(void *);
@@ -82,7 +113,7 @@ typedef struct election_votes {
 
 typedef struct appendentries_msgs {
     int msg_term;
-    int msg_id;
+    int msg_src_ip;
     msg_type_t msg_type;
     char key[50];
     char value[50];
@@ -126,16 +157,7 @@ static event_handler_t event_handlers[STATE_N][EVENT_N] = {
         [LEADER][LOG_UPDATE] = log_update_hndlr
 };
 
-typedef struct log_entries
-{
-    int term;
-    msg_type_t type;
-    char key[50];
-    char value[50];
-    int has_commited;
-} log_entry_t;
 
-void commit(struct appendentries_msg, int accepted);
 
 //////////// END FROM RACHEL /////////////
 

@@ -7,7 +7,7 @@
 #include "raft.h"
 
 void cast_vote_requests(int id);
-void send_vote(void);
+void send_vote(unsigned int term);
 void reset_election_timeout(void);
 
 

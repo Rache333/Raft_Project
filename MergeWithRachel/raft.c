@@ -6,9 +6,9 @@
 
 static pthread_t t1;
 
-static event_handler_t event_handlers[STATE_N][EVENT_N] = {
-        [LEADER][LOG_UPDATE] = log_update_handler
-};
+//static event_handler_t event_handlers[STATE_N][EVENT_N] = {
+//        [LEADER][LOG_UPDATE] = log_update_handler
+//};
 
 callback_types_t callback_type;
 
