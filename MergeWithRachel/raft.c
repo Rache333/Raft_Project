@@ -4,7 +4,8 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-static pthread_t t1;
+static pthread_t run_t;
+static pthread_t rx;
 
 //static event_handler_t event_handlers[STATE_N][EVENT_N] = {
 //        [LEADER][LOG_UPDATE] = log_update_handler
@@ -27,6 +28,8 @@ void run(void * a) {
     mqd_t mq;
     mq = mq_open("/Event queue", O_CREAT | O_RDONLY, 0644, &attr);
     char buffer[MSG_SIZE];
+
+    pthread_create(&rx,NULL, &listen_to_msgs,NULL);
 
     while(1) {
 
@@ -52,7 +55,7 @@ void init(delete_callback_t _delete1, edit_callback_t _edit1) {
 
     callback_type._delete = _delete1;
     callback_type._edit = _edit1;
-    pthread_create(&t1,NULL, &run,NULL);
+    pthread_create(&run_t,NULL, &run,NULL);
 
 }
 
@@ -83,14 +86,26 @@ void node_init() {
 }
 
 
-void join_multicast() {
+void listen_to_msgs() {
+
+    char* msg;
+
+    while(1) {
+        printf("Receiving...\n");
+        fflush(stdout);
+        recv_msg(self.listener_sock_fd, & msg, MSG_SIZE);
+        //puts(inet_ntoa(self.l_addr.sin_addr));
+        printf("%s", msg);
+        fflush(stdout);
+    }
 
 }
 
 
 void log_update_hndlr(void* cmd) {
     char * cmd_str = (char *) cmd;
-    send_msg(self.sender_sock_fd, cmd_str, self.s_addr);
+    sleep(5);
+    send_msg(self.sender_sock_fd, cmd_str, &self.s_addr);
     puts("the msg was sent!");
 }
 
