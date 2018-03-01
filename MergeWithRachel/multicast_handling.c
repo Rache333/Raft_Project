@@ -68,7 +68,7 @@ void send_msg(int fd, char * msg, struct sockaddr_in * addr)
 {
     if (sendto(fd, msg, strlen(msg),0,(struct sockaddr *) addr,
                sizeof(*addr)) < 0) {
-        perror("send msg failed");
+        printf("send msg failed, %s", strerror(errno));
         exit(1);
     }
 }

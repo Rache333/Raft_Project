@@ -16,11 +16,6 @@ callback_types_t callback_type;
 void run(void * a) {
 
 
-//    printf("hello from c proc num: %d\n", getpid());
-//    fflush(stdout);
-//    printf("%d, %d\n", (int)callback_type._delete, (int)callback_type._edit);
-//    join_multicast();
-
     time_t t;
     struct mq_attr attr;
     attr.mq_flags = 0;
@@ -44,6 +39,12 @@ void run(void * a) {
         }
         buffer[bytes_read] = '\0';
         printf("Received: %s\n", buffer);
+
+        char* buf = strdup(buffer);
+        char* str_cmd = strsep(&buf, ",");
+
+        event_handlers[self.node_state][atoi(str_cmd)](buf);
+
     }
 }
 
@@ -58,7 +59,10 @@ void init(delete_callback_t _delete1, edit_callback_t _edit1) {
 
 void node_init() {
 
-    self.node_state = FOLLOWER;
+    signal(SIGALRM, election_timeout_hndlr);
+
+    self.node_state = LEADER;
+    //printf("node status: %d", (unsigned int)&self);
     self.term = -1;
     self.election_timer_interval = GEN_ELECTION_TIMER;
 
@@ -73,6 +77,9 @@ void node_init() {
 
     self.log_len = 0;
     self.log_num_of_committed = 0;
+
+    //ualarm(self.election_timer_interval, 0);
+
 }
 
 
@@ -81,7 +88,24 @@ void join_multicast() {
 }
 
 
-state_t log_update_handler(node_mode_t * node_mode) {
+void log_update_hndlr(void* cmd) {
+    char * cmd_str = (char *) cmd;
+    send_msg(self.sender_sock_fd, cmd_str, self.s_addr);
+    puts("the msg was sent!");
+}
+
+void update_delete_hndlr(void * cmd) {
+    char* cmd_str = (char* )cmd;
+
+}
+
+void update_add_hndlr(void * cmd) {
+    char* cmd_str = (char* )cmd;
+
+}
+
+void update_edit_hndlr(void * cmd) {
+    char* cmd_str = (char* )cmd;
 
 }
 
@@ -108,10 +132,10 @@ void election_timeout_hndlr(void * p)
     // vote for myself
     self.vote_count = 1;
 
-    //restart timer
-
     //send vote requests
     send_multicast_vote_request();
+
+    ualarm(self.election_timer_interval, 0);
 }
 
 void send_vote(unsigned int term)
@@ -138,12 +162,14 @@ void vote_req_hndlr(void * p)
         //vote for higher term
         send_vote(*term);
 
-        // restart timer
+        ualarm(self.election_timer_interval, 0);
     }
-    // else,
-    // one of the following cases:
-    // 1. follower has voted already for current term
-    // 2. candidate stay with his state and current term
+
+    /* else,
+     * one of the following cases:
+     * 1. follower has voted already for current term
+     * 2. candidate stay with his state and current term
+     */
 }
 
 /* leader become a follower in the new higher term*/
@@ -156,7 +182,8 @@ void node_stepdown(int term)
     // number of received votes
     self.vote_count = 0;
 
-    //start timer
+    ualarm(self.election_timer_interval, 0);
+
 }
 
 void l_vote_req_hndlr(void * p)
@@ -259,10 +286,6 @@ void l_append_entry_msg_hndlr(void * p)
     {
         node_stepdown(ae_msg->msg_term);
     }
-
-}
-
-void log_update_hndlr(void * p) {
 
 }
 

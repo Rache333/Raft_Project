@@ -11,6 +11,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 
 #define PORT 12345
 #define MULTI_GROUP "225.0.0.37"

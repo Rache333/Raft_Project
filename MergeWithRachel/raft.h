@@ -14,9 +14,10 @@
 #include <sys/types.h>
 #include <sys/syscall.h>
 #include <pthread.h>
-#include <string.h>
+#include <stdlib.h>
 #include <errno.h>
 #include <netinet/in.h>
+#include <signal.h>
 
 
 #define NODE_N 4
@@ -25,6 +26,7 @@
 #define STATE_N ((LEADER) + (1))
 #define EVENT_N ((LOG_UPDATE) + (1))
 #define MSG_TYPES_N ((COMMIT) + (1))
+#define UPDATE_TYPES_N ((UPDATE_DELETE) + (1))
 #define MSG_SIZE 1024
 #define BFRSIZE 512
 #define RAFT_MSG_SIZE 10
@@ -45,10 +47,10 @@ typedef enum update_types {
 } update_type_t;
 
 typedef enum msg_types {
-    ADD = 0,
+    HEART_BEAT = 0,
+    ADD,
     EDIT,
     DELETE,
-    HEART_BEAT,
     COMMIT
 } msg_type_t;
 
@@ -63,13 +65,6 @@ typedef enum events {
     HEARTBEAT_TIMEOUT,
     LOG_UPDATE
 } event_t;
-
-//typedef struct node_modes {
-//    state_t node_state;
-//    int term;
-//    int election_timer_interval;
-//    int vote_count;
-//} node_mode_t;
 
 typedef struct log_entries
 {
@@ -130,8 +125,12 @@ typedef struct callback_types {
     edit_callback_t _edit;
 } callback_types_t;
 
-//////////// FROM RACHEL ////////////
-
+node_mode_t self;
+void run(void *);
+void node_init();
+void join_multicast();
+void send_appendentries(struct appendentries_msg);
+void commit(struct appendentries_msg, int accepted);
 
 void election_timeout_hndlr(void * p);
 void vote_req_hndlr(void * p);
@@ -141,6 +140,11 @@ void log_update_hndlr(void * p);
 void f_append_entry_msg_hndlr(void * p);
 void c_append_entry_msg_hndlr(void * p);
 void l_append_entry_msg_hndlr(void * p);
+
+void update_add_hndlr(void * p);
+void update_edit_hndlr(void * p);
+void update_delete_hndlr(void * p);
+
 
 static event_handler_t event_handlers[STATE_N][EVENT_N] = {
         [FOLLOWER][ELECTION_TIMEOUT] = election_timeout_hndlr,
@@ -157,16 +161,11 @@ static event_handler_t event_handlers[STATE_N][EVENT_N] = {
         [LEADER][LOG_UPDATE] = log_update_hndlr
 };
 
+static event_handler_t log_update_handlers[UPDATE_TYPES_N] = {
+        [UPDATE_ADD] = update_add_hndlr,
+        [UPDATE_EDIT] = update_edit_hndlr,
+        [UPDATE_DELETE] = update_delete_hndlr
+};
 
 
-//////////// END FROM RACHEL /////////////
-
-
-node_mode_t self;
-void run(void *);
-void node_init();
-void join_multicast();
-state_t log_update_handler(node_mode_t *);
-void send_appendentries(struct appendentries_msg);
-void commit(struct appendentries_msg, int accepted);
 #endif
