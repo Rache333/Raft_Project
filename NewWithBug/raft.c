@@ -1,9 +1,5 @@
 #include "raft.h"
-#include <stdio.h>
-#include <time.h>
-#include <sys/time.h>
-#include <unistd.h>
-#include "multicast_handling.h"
+
 
 static pthread_t run_t;
 static pthread_t rx;
@@ -81,7 +77,7 @@ void node_init() {
     self.sender_sock_fd = init_multicast_sender(&self.s_addr);
 
     self.log_len = 0;
-    self.log_num_of_committed = 0;
+    memset(self.log_ack_count, 0, sizeof(self.log_ack_count) / sizeof(self.log_ack_count[0]));
 
     //ualarm(self.election_timer_interval, 0);
 
@@ -115,7 +111,7 @@ void listen_to_msgs() {
 }
 
 
-void log_update_hndlr(void* cmd) {
+void log_update_hndlr(char * cmd) {
 
     char * cmd_str = (char *) cmd;
     char new_cmd[MSG_SIZE];
@@ -125,17 +121,17 @@ void log_update_hndlr(void* cmd) {
     printf("%s was sent", new_cmd);
 }
 
-void update_delete_hndlr(void * cmd) {
+void update_delete_hndlr(char * cmd) {
     char* cmd_str = (char* )cmd;
 
 }
 
-void update_add_hndlr(void * cmd) {
+void update_add_hndlr(char * cmd) {
     char* cmd_str = (char* )cmd;
 
 }
 
-void update_edit_hndlr(void * cmd) {
+void update_edit_hndlr(char * cmd) {
     char* cmd_str = (char* )cmd;
 
 }
@@ -154,7 +150,7 @@ void send_multicast_vote_request()
     send_msg(self.sender_sock_fd, msg, &self.s_addr);
 }
 
-void election_timeout_hndlr(void * p)
+void election_timeout_hndlr(char * p)
 {
     // move or stay on candidate state with higher term
     self.node_state = CANDIDATE;
@@ -181,7 +177,7 @@ void send_vote(unsigned int term)
     send_msg(self.listener_sock_fd, msg, &self.l_addr);
 }
 
-void vote_req_hndlr(void * p)
+void vote_req_hndlr(char * p)
 {
     unsigned int * term = (int *) p;
     if(*term > self.term)
@@ -217,7 +213,7 @@ void node_stepdown(int term)
 
 }
 
-void l_vote_req_hndlr(void * p)
+void l_vote_req_hndlr(char * p)
 {
     unsigned int * term = (int *) p;
     if(*term > self.term)
@@ -289,35 +285,3 @@ int append_entry_msg_hndlr(appendentries_msg_t * ae_msg)
 
     // restart timer
 }
-
-void f_append_entry_msg_hndlr(void * p)
-{
-    appendentries_msg_t * ae_msg = (appendentries_msg_t *) p;
-
-    append_entry_msg_hndlr(ae_msg);
-}
-
-void c_append_entry_msg_hndlr(void * p)
-{
-    appendentries_msg_t * ae_msg = (appendentries_msg_t *) p;
-
-    int has_new_leader = append_entry_msg_hndlr(ae_msg);
-    if(has_new_leader)
-    {
-        self.node_state = FOLLOWER;
-    }
-}
-
-void l_append_entry_msg_hndlr(void * p)
-{
-    appendentries_msg_t * ae_msg = (appendentries_msg_t *) p;
-
-    int has_new_leader = append_entry_msg_hndlr(ae_msg);
-    if(has_new_leader)
-    {
-        node_stepdown(ae_msg->msg_term);
-    }
-
-}
-
-//////// END FROM RACHEL ///////////

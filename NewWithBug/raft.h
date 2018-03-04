@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <sys/socket.h>
 #include "election.h"
-#include "logreplication.h"
+#include "log_replication.h"
 #include "logupdatecommands.h"
 #include <fcntl.h>           /* For O_* constants */
 #include <sys/stat.h>        /* For mode constants */
@@ -18,6 +18,7 @@
 #include <errno.h>
 #include <netinet/in.h>
 #include <signal.h>
+#include "multicast_handling.h"
 
 
 #define NODE_N 4
@@ -90,11 +91,11 @@ typedef struct node_modes {
     /* to maintain log */
     log_entry_t log[1000];
     int log_len;
-    int log_num_of_committed;
+    unsigned char log_ack_count[1000];
 
 } node_mode_t;
 
-typedef void (*event_handler_t)(void *);
+typedef void (*event_handler_t)(char *);
 
 typedef struct election_vote_reqs {
     int candidate_id;
@@ -131,18 +132,18 @@ void listen_to_msgs();
 void send_appendentries(struct appendentries_msg);
 void commit(struct appendentries_msg, int accepted);
 
-void election_timeout_hndlr(void * p);
-void vote_req_hndlr(void * p);
-void l_vote_req_hndlr(void * p);
-void log_update_hndlr(void * p);
+void election_timeout_hndlr(char * cmd);
+void vote_req_hndlr(char * p);
+void l_vote_req_hndlr(char * p);
+void log_update_hndlr(char * p);
 
-void f_append_entry_msg_hndlr(void * p);
-void c_append_entry_msg_hndlr(void * p);
-void l_append_entry_msg_hndlr(void * p);
+void f_append_entry_msg_hndlr(char * p);
+void c_append_entry_msg_hndlr(char * p);
+void l_append_entry_msg_hndlr(char * p);
 
-void update_add_hndlr(void * p);
-void update_edit_hndlr(void * p);
-void update_delete_hndlr(void * p);
+void update_add_hndlr(char * p);
+void update_edit_hndlr(char * p);
+void update_delete_hndlr(char * p);
 
 
 static event_handler_t event_handlers[STATE_N][EVENT_N] = {
@@ -153,9 +154,11 @@ static event_handler_t event_handlers[STATE_N][EVENT_N] = {
         [CANDIDATE][VOTE_REQUEST] = vote_req_hndlr,
         [LEADER][VOTE_REQUEST] = l_vote_req_hndlr,
 
-        [FOLLOWER][APPENDENTRIES_MSG] = f_append_entry_msg_hndlr,
-        [CANDIDATE][APPENDENTRIES_MSG] = c_append_entry_msg_hndlr,
-        [LEADER][APPENDENTRIES_MSG] = l_append_entry_msg_hndlr,
+        [FOLLOWER][APPENDENTRIES_MSG] = follower_msg_hndlr,
+        [CANDIDATE][APPENDENTRIES_MSG] = candidate_msg_hndlr,
+        [LEADER][APPENDENTRIES_MSG] = leader_msg_hndlr,
+
+        [LEADER][APPENDENTRIES_MSG_ACK] = msg_ack_hndlr,
 
         [LEADER][LOG_UPDATE] = log_update_hndlr
 };
