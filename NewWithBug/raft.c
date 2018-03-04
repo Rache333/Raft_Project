@@ -27,6 +27,7 @@ void run(void * a) {
     srand((unsigned)time(&t));
     node_init(& self);
     mqd_t mq;
+    mq_unlink("/Event queue");
     mq = mq_open("/Event queue", O_CREAT | O_RDONLY, 0644, &attr);
     char buffer[MSG_SIZE];
 
@@ -95,23 +96,20 @@ void listen_to_msgs() {
     struct sockaddr_in sockaddrIn;
     sockaddrIn.sin_family = AF_INET;
     sockaddrIn.sin_port = htons(PORT);
+    mq = mq_open("/Event queue", O_WRONLY);
 
     while(1) {
-        if(self.node_state == LEADER) {
 
-            printf("Receiving...\n");
-            //fflush(stdout);
 
-            recv_msg(self.listener_sock_fd,(struct sockaddr_in *) &self.l_addr ,msg, s_addr , MSG_SIZE);
-            puts(s_addr);
-            sockaddrIn.sin_addr.s_addr = inet_addr(s_addr);
-            send_msg(self.sender_sock_fd, "Ack from reciever", &sockaddrIn);
-            printf("%s\n", msg);
-            //fflush(stdout);
-            mq = mq_open("/Event queue", O_WRONLY);
-            mq_send(mq, msg, sizeof(msg), 0);
-            printf("done writing %s to the queue ...", msg);
-        }
+        recv_msg(self.listener_sock_fd,(struct sockaddr_in *) &self.l_addr ,msg, s_addr , MSG_SIZE);
+        puts(s_addr);
+        sockaddrIn.sin_addr.s_addr = inet_addr(s_addr);
+        send_msg(self.sender_sock_fd, "Ack from reciever", &sockaddrIn);
+        printf("%s\n", msg);
+        //fflush(stdout);
+        mq_send(mq, msg, sizeof(msg), 0);
+        printf("done writing %s to the queue ...", msg);
+
     }
 
 }
@@ -120,7 +118,7 @@ void listen_to_msgs() {
 void log_update_hndlr(void* cmd) {
 
     char * cmd_str = (char *) cmd;
-    send_msg(self.sender_sock_fd, "hello", &self.s_addr);
+    send_msg(self.sender_sock_fd, cmd_str, &self.s_addr);
     puts("the msg was sent!");
 }
 
