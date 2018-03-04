@@ -3,6 +3,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include "multicast_handling.h"
 
 static pthread_t run_t;
 static pthread_t rx;
@@ -76,7 +77,7 @@ void node_init() {
     self.listener_sock_fd = init_multicast_listener(&self.l_addr);
 
     // create socket to send raft multicast messages
-    //self.sender_sock_fd = init_multicast_sender(&self.s_addr);
+    self.sender_sock_fd = init_multicast_sender(&self.s_addr);
 
     self.log_len = 0;
     self.log_num_of_committed = 0;
@@ -88,17 +89,28 @@ void node_init() {
 
 void listen_to_msgs() {
 
-    char *msg;
+    char msg[MSG_SIZE];
+    char s_addr[32];
+    mqd_t mq;
+    struct sockaddr_in sockaddrIn;
+    sockaddrIn.sin_family = AF_INET;
+    sockaddrIn.sin_port = htons(PORT);
 
     while(1) {
         if(self.node_state == LEADER) {
 
             printf("Receiving...\n");
-            fflush(stdout);
-            recv_msg(self.listener_sock_fd, &self.l_addr ,msg, MSG_SIZE);
-            //self.s_addr(inet_ntoa(self.l_addr.sin_addr));
-            printf("%s", msg);
-            fflush(stdout);
+            //fflush(stdout);
+
+            recv_msg(self.listener_sock_fd,(struct sockaddr_in *) &self.l_addr ,msg, s_addr , MSG_SIZE);
+            puts(s_addr);
+            sockaddrIn.sin_addr.s_addr = inet_addr(s_addr);
+            send_msg(self.sender_sock_fd, "Ack from reciever", &sockaddrIn);
+            printf("%s\n", msg);
+            //fflush(stdout);
+            mq = mq_open("/Event queue", O_WRONLY);
+            mq_send(mq, msg, sizeof(msg), 0);
+            printf("done writing %s to the queue ...", msg);
         }
     }
 

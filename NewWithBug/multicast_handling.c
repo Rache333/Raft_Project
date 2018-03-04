@@ -1,5 +1,6 @@
 
 #include "multicast_handling.h"
+#include "raft.h"
 
 /////// NEW FILE FROM RACHEL ///////////
 
@@ -68,20 +69,25 @@ void send_msg(int fd, char * msg, struct sockaddr_in * addr)
 {
     if (sendto(fd, msg, strlen(msg),0,(struct sockaddr *) addr,
                sizeof(*addr)) < 0) {
-        printf("send msg failed, %s", strerror(errno));
+        printf("send msg failed, %s\n", strerror(errno));
         exit(1);
     }
 }
 
-void recv_msg(int fd, struct sockaddr_in * addr, char  * recv_buff, int len)
+void recv_msg(int fd, struct sockaddr_in* addr, char* recv_buf, char* s_addr , int len)
 {
 
     int nbytes;
-    int addrlen = sizeof(*addr);
+    int addrlen = sizeof(self.l_addr);
+    char buf[MSG_SIZE];
 
-    if ((nbytes = recvfrom(fd, recv_buff, len ,0,(struct sockaddr *) addr, &addrlen)) < 0) {
+    if ((nbytes = recvfrom(fd, buf, MSG_SIZE ,0,(struct sockaddr *) addr, &addrlen)) < 0) {
         perror("recv msg failed");
         exit(1);
     }
+
+    strcpy(recv_buf, buf);
+    strcpy(s_addr, inet_ntoa(self.l_addr.sin_addr));
+
 
 }

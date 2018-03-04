@@ -87,7 +87,6 @@ typedef struct node_modes {
     struct sockaddr_in s_addr;
     int listener_sock_fd;
     struct sockaddr_in l_addr;
-
     /* to maintain log */
     log_entry_t log[1000];
     int log_len;
