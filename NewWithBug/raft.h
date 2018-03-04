@@ -47,10 +47,10 @@ typedef enum update_types {
 } update_type_t;
 
 typedef enum msg_types {
-    HEART_BEAT = 0,
-    ADD,
+    ADD = 0,
     EDIT,
     DELETE,
+    HEARTBEAT,
     COMMIT
 } msg_type_t;
 

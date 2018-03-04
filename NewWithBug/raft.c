@@ -104,7 +104,7 @@ void listen_to_msgs() {
         recv_msg(self.listener_sock_fd,(struct sockaddr_in *) &self.l_addr ,msg, s_addr , MSG_SIZE);
         puts(s_addr);
         sockaddrIn.sin_addr.s_addr = inet_addr(s_addr);
-        send_msg(self.sender_sock_fd, "Ack from reciever", &sockaddrIn);
+        //send_msg(self.sender_sock_fd, "Ack from reciever", &sockaddrIn);
         printf("%s\n", msg);
         //fflush(stdout);
         mq_send(mq, msg, sizeof(msg), 0);
@@ -118,8 +118,11 @@ void listen_to_msgs() {
 void log_update_hndlr(void* cmd) {
 
     char * cmd_str = (char *) cmd;
-    send_msg(self.sender_sock_fd, cmd_str, &self.s_addr);
-    puts("the msg was sent!");
+    char new_cmd[MSG_SIZE];
+    sprintf(new_cmd, "%d,%s\0",(int)APPENDENTRIES_MSG, cmd_str);
+    //send_msg(self.sender_sock_fd, new_cmd, &self.s_addr);
+    puts("the msg was sent!\n");
+    printf("%s was sent", new_cmd);
 }
 
 void update_delete_hndlr(void * cmd) {
@@ -270,7 +273,7 @@ int append_entry_msg_hndlr(appendentries_msg_t * ae_msg)
     self.l_addr.sin_addr.s_addr = inet_addr(ae_msg->msg_src_ip);
     send_msg(self.listener_sock_fd, msg, &self.l_addr);
 
-    if(ae_msg->msg_type != HEART_BEAT)
+    if(ae_msg->msg_type != HEARTBEAT)
     {
         // add to log
         log_entry_t new_entry;
