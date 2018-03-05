@@ -66,7 +66,9 @@ int init_multicast_listener(struct sockaddr_in * addr)
 
 void send_msg(int fd, char * msg, struct sockaddr_in * addr)
 {
-    if (sendto(fd, msg, strlen(msg),0,(struct sockaddr *) addr,
+    char id_msg[MSG_SIZE];
+    sprintf(id_msg, "%d,%s", NODE_ID, msg); // add the node id to the beginning of the msg
+    if (sendto(fd, id_msg, strlen(id_msg),0,(struct sockaddr *) addr,
                sizeof(*addr)) < 0) {
         printf("send msg failed, %s\n", strerror(errno));
         exit(1);

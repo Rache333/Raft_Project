@@ -22,9 +22,9 @@
 #include <time.h>
 
 
-#define NODE_N 4
-#define MAJORITY 3
-#define GEN_ELECTION_TIMER (((150) + ((rand()) % (150))) * (1000))
+#define NODE_N 2
+#define MAJORITY 2
+#define GEN_ELECTION_TIMER (((150) + ((rand()) % (150))) * (6000)) //10 times greater timer for debugging.
 #define STATE_N ((LEADER) + (1))
 #define EVENT_N ((LOG_UPDATE) + (1))
 #define MSG_TYPES_N ((COMMIT) + (1))
@@ -32,6 +32,9 @@
 #define MSG_SIZE 1024
 #define BFRSIZE 512
 #define RAFT_MSG_SIZE 10
+//#define MY_IP "100.64.1.175"
+#define EVENT_QUEUE "/Event queue2"
+#define NODE_ID 2
 
 typedef struct msg {
     int term;
@@ -200,10 +203,10 @@ static event_handler_t log_update_handlers[UPDATE_TYPES_N] = {
 static const msg_handler_t msg_handlers[MSG_TYPES_N] = {
 
         [HEARTBEAT] = heartbeat_msg_hndlr,
-        [1] = add_msg_hndlr,
-        [2] = edit_msg_hndlr,
-        [3] = delete_msg_hndlr,
-        [4] = commit_msg_hndlr
+        [ADD] = add_msg_hndlr,
+        [EDIT] = edit_msg_hndlr,
+        [DELETE] = delete_msg_hndlr,
+        [COMMIT] = commit_msg_hndlr
 };
 
 

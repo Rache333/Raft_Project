@@ -14,7 +14,7 @@ int delete_cmd(char * key) {
     char * str;
     sprintf(str, "%d,%d,%s%c",(int)LOG_UPDATE, (int)UPDATE_DELETE, key, '\0');
     /* open the mail queue */
-    mq = mq_open("Event queue", O_WRONLY);
+    mq = mq_open(EVENT_QUEUE, O_WRONLY);
     mq_send(mq, str, sizeof(str), 0);
 
     return 0;
@@ -31,7 +31,7 @@ int edit_cmd(char* key, char* value) {
     char * str;
     sprintf(str, "%d,%d,%s,%s%c",(int)LOG_UPDATE, (int)UPDATE_EDIT, key, value, '\0');
     /* open the mail queue */
-    mq = mq_open("/Event queue", O_WRONLY);
+    mq = mq_open(EVENT_QUEUE, O_WRONLY);
     mq_send(mq, str, sizeof(str), 0);
 
     return 0;

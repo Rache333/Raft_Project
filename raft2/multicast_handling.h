@@ -14,8 +14,8 @@
 #include <errno.h>
 #include "raft.h"
 
-#define PORT 12345
-#define MULTI_GROUP "225.0.0.37"
+#define PORT 62345
+#define MULTI_GROUP "225.0.0.38"
 
 int init_multicast_sender(struct sockaddr_in * addr);
 
