@@ -123,6 +123,33 @@ raft2/fast:
 	$(MAKE) -f CMakeFiles/raft2.dir/build.make CMakeFiles/raft2.dir/build
 .PHONY : raft2/fast
 
+a.o: a.c.o
+
+.PHONY : a.o
+
+# target to build an object file
+a.c.o:
+	$(MAKE) -f CMakeFiles/raft2.dir/build.make CMakeFiles/raft2.dir/a.c.o
+.PHONY : a.c.o
+
+a.i: a.c.i
+
+.PHONY : a.i
+
+# target to preprocess a source file
+a.c.i:
+	$(MAKE) -f CMakeFiles/raft2.dir/build.make CMakeFiles/raft2.dir/a.c.i
+.PHONY : a.c.i
+
+a.s: a.c.s
+
+.PHONY : a.s
+
+# target to generate assembly for a file
+a.c.s:
+	$(MAKE) -f CMakeFiles/raft2.dir/build.make CMakeFiles/raft2.dir/a.c.s
+.PHONY : a.c.s
+
 election.o: election.c.o
 
 .PHONY : election.o
@@ -150,32 +177,32 @@ election.c.s:
 	$(MAKE) -f CMakeFiles/raft2.dir/build.make CMakeFiles/raft2.dir/election.c.s
 .PHONY : election.c.s
 
-log_replication.o: log_replication.c.o
+logreplication.o: logreplication.c.o
 
-.PHONY : log_replication.o
+.PHONY : logreplication.o
 
 # target to build an object file
-log_replication.c.o:
-	$(MAKE) -f CMakeFiles/raft2.dir/build.make CMakeFiles/raft2.dir/log_replication.c.o
-.PHONY : log_replication.c.o
+logreplication.c.o:
+	$(MAKE) -f CMakeFiles/raft2.dir/build.make CMakeFiles/raft2.dir/logreplication.c.o
+.PHONY : logreplication.c.o
 
-log_replication.i: log_replication.c.i
+logreplication.i: logreplication.c.i
 
-.PHONY : log_replication.i
+.PHONY : logreplication.i
 
 # target to preprocess a source file
-log_replication.c.i:
-	$(MAKE) -f CMakeFiles/raft2.dir/build.make CMakeFiles/raft2.dir/log_replication.c.i
-.PHONY : log_replication.c.i
+logreplication.c.i:
+	$(MAKE) -f CMakeFiles/raft2.dir/build.make CMakeFiles/raft2.dir/logreplication.c.i
+.PHONY : logreplication.c.i
 
-log_replication.s: log_replication.c.s
+logreplication.s: logreplication.c.s
 
-.PHONY : log_replication.s
+.PHONY : logreplication.s
 
 # target to generate assembly for a file
-log_replication.c.s:
-	$(MAKE) -f CMakeFiles/raft2.dir/build.make CMakeFiles/raft2.dir/log_replication.c.s
-.PHONY : log_replication.c.s
+logreplication.c.s:
+	$(MAKE) -f CMakeFiles/raft2.dir/build.make CMakeFiles/raft2.dir/logreplication.c.s
+.PHONY : logreplication.c.s
 
 logupdatecommands.o: logupdatecommands.c.o
 
@@ -267,12 +294,15 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... raft2"
+	@echo "... a.o"
+	@echo "... a.i"
+	@echo "... a.s"
 	@echo "... election.o"
 	@echo "... election.i"
 	@echo "... election.s"
-	@echo "... log_replication.o"
-	@echo "... log_replication.i"
-	@echo "... log_replication.s"
+	@echo "... logreplication.o"
+	@echo "... logreplication.i"
+	@echo "... logreplication.s"
 	@echo "... logupdatecommands.o"
 	@echo "... logupdatecommands.i"
 	@echo "... logupdatecommands.s"

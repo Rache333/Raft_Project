@@ -1,6 +1,5 @@
 
 #include "multicast_handling.h"
-#include "raft.h"
 
 /////// NEW FILE FROM RACHEL ///////////
 

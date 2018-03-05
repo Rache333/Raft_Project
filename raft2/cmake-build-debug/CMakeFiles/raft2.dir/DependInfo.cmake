@@ -4,8 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
+  "/home/ubuntu/CLionProjects/raft2/a.c" "/home/ubuntu/CLionProjects/raft2/cmake-build-debug/CMakeFiles/raft2.dir/a.c.o"
   "/home/ubuntu/CLionProjects/raft2/election.c" "/home/ubuntu/CLionProjects/raft2/cmake-build-debug/CMakeFiles/raft2.dir/election.c.o"
-  "/home/ubuntu/CLionProjects/raft2/log_replication.c" "/home/ubuntu/CLionProjects/raft2/cmake-build-debug/CMakeFiles/raft2.dir/log_replication.c.o"
+  "/home/ubuntu/CLionProjects/raft2/logreplication.c" "/home/ubuntu/CLionProjects/raft2/cmake-build-debug/CMakeFiles/raft2.dir/logreplication.c.o"
   "/home/ubuntu/CLionProjects/raft2/logupdatecommands.c" "/home/ubuntu/CLionProjects/raft2/cmake-build-debug/CMakeFiles/raft2.dir/logupdatecommands.c.o"
   "/home/ubuntu/CLionProjects/raft2/multicast_handling.c" "/home/ubuntu/CLionProjects/raft2/cmake-build-debug/CMakeFiles/raft2.dir/multicast_handling.c.o"
   "/home/ubuntu/CLionProjects/raft2/raft.c" "/home/ubuntu/CLionProjects/raft2/cmake-build-debug/CMakeFiles/raft2.dir/raft.c.o"

@@ -1,9 +1,10 @@
 file(REMOVE_RECURSE
   "CMakeFiles/raft2.dir/election.c.o"
-  "CMakeFiles/raft2.dir/log_replication.c.o"
+  "CMakeFiles/raft2.dir/logreplication.c.o"
   "CMakeFiles/raft2.dir/logupdatecommands.c.o"
   "CMakeFiles/raft2.dir/multicast_handling.c.o"
   "CMakeFiles/raft2.dir/raft.c.o"
+  "CMakeFiles/raft2.dir/a.c.o"
   "libraft2.pdb"
   "libraft2.a"
 )

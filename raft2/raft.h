@@ -1,12 +1,12 @@
 #ifndef RAFT_LIBRARY_H
 #define RAFT_LIBRARY_H
+#include "logreplication.h"
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/socket.h>
 #include "election.h"
-#include "log_replication.h"
 #include "logupdatecommands.h"
 #include <fcntl.h>           /* For O_* constants */
 #include <sys/stat.h>        /* For mode constants */
@@ -19,6 +19,7 @@
 #include <netinet/in.h>
 #include <signal.h>
 #include "multicast_handling.h"
+//#include "logreplication.h"
 
 
 #define NODE_N 4
@@ -31,6 +32,28 @@
 #define MSG_SIZE 1024
 #define BFRSIZE 512
 #define RAFT_MSG_SIZE 10
+
+typedef struct msg {
+    int term;
+    char key[50];
+    char value[50];
+    char src_ip[50];
+
+} msg_t;
+
+void follower_msg_hndlr(char * msg);
+void candidate_msg_hndlr(char * msg);
+void leader_msg_hndlr(char * msg);
+void msg_ack_hndlr(char * msg);
+
+typedef int (* msg_handler_t)(msg_t);
+
+int heartbeat_msg_hndlr(msg_t mt);
+int add_msg_hndlr(msg_t mt);
+int edit_msg_hndlr(msg_t mt);
+int delete_msg_hndlr(msg_t mt);
+int commit_msg_hndlr(msg_t mt);
+
 
 typedef void (* delete_callback_t)(char * key);
 typedef void (* edit_callback_t)(char * key, char * value);
@@ -167,6 +190,16 @@ static event_handler_t log_update_handlers[UPDATE_TYPES_N] = {
         [UPDATE_ADD] = update_add_hndlr,
         [UPDATE_EDIT] = update_edit_hndlr,
         [UPDATE_DELETE] = update_delete_hndlr
+};
+
+
+static const msg_handler_t msg_handlers[MSG_TYPES_N] = {
+
+        [HEARTBEAT] = heartbeat_msg_hndlr,
+        [1] = add_msg_hndlr,
+        [2] = edit_msg_hndlr,
+        [3] = delete_msg_hndlr,
+        [4] = commit_msg_hndlr
 };
 
 
