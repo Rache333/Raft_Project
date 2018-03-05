@@ -123,33 +123,6 @@ raft2/fast:
 	$(MAKE) -f CMakeFiles/raft2.dir/build.make CMakeFiles/raft2.dir/build
 .PHONY : raft2/fast
 
-a.o: a.c.o
-
-.PHONY : a.o
-
-# target to build an object file
-a.c.o:
-	$(MAKE) -f CMakeFiles/raft2.dir/build.make CMakeFiles/raft2.dir/a.c.o
-.PHONY : a.c.o
-
-a.i: a.c.i
-
-.PHONY : a.i
-
-# target to preprocess a source file
-a.c.i:
-	$(MAKE) -f CMakeFiles/raft2.dir/build.make CMakeFiles/raft2.dir/a.c.i
-.PHONY : a.c.i
-
-a.s: a.c.s
-
-.PHONY : a.s
-
-# target to generate assembly for a file
-a.c.s:
-	$(MAKE) -f CMakeFiles/raft2.dir/build.make CMakeFiles/raft2.dir/a.c.s
-.PHONY : a.c.s
-
 election.o: election.c.o
 
 .PHONY : election.o
@@ -294,9 +267,6 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... raft2"
-	@echo "... a.o"
-	@echo "... a.i"
-	@echo "... a.s"
 	@echo "... election.o"
 	@echo "... election.i"
 	@echo "... election.s"

@@ -1,3 +1,4 @@
+
 #include "raft.h"
 
 
@@ -10,7 +11,7 @@ static pthread_t rx;
 callback_types_t callback_type;
 
 
-void run(void * a) {
+void * run(void * a) {
 
 
     time_t t;
@@ -20,13 +21,13 @@ void run(void * a) {
     attr.mq_msgsize = MSG_SIZE;
     attr.mq_curmsgs = 0;
     srand((unsigned)time(&t));
-    node_init(& self);
+    node_init();
     mqd_t mq;
     mq_unlink("/Event queue");
     mq = mq_open("/Event queue", O_CREAT | O_RDONLY, 0644, &attr);
     char buffer[MSG_SIZE];
 
-    pthread_create(&rx,NULL, &listen_to_msgs,NULL);
+    pthread_create(&rx,NULL, listen_to_msgs,NULL);
 
     while(1) {
 
@@ -52,14 +53,24 @@ void init(delete_callback_t _delete1, edit_callback_t _edit1) {
 
     callback_type._delete = _delete1;
     callback_type._edit = _edit1;
-    pthread_create(&run_t,NULL, &run,NULL);
+    pthread_create(&run_t,NULL, run,NULL);
 
 }
 
+void sigalarm_hndr(int p)
+{
+    if(self.node_state == LEADER)
+    {
+       // heartbeat timeout
+        //TODO
+    } else {
+        election_timeout_hndlr(NULL);
+    }
+}
 
 void node_init() {
 
-    signal(SIGALRM, election_timeout_hndlr);
+    signal(SIGALRM, sigalarm_hndr);
 
     self.node_state = LEADER;
     //printf("node status: %d", (unsigned int)&self);
@@ -83,7 +94,7 @@ void node_init() {
 }
 
 
-void listen_to_msgs() {
+void * listen_to_msgs(void * p) {
 
     char msg[MSG_SIZE];
     char s_addr[32];
@@ -103,7 +114,7 @@ void listen_to_msgs() {
         printf("%s\n", msg);
         //fflush(stdout);
         mq_send(mq, msg, sizeof(msg), 0);
-        printf("done writing %s to the queue ...", msg);
+        printf("done writing %s to the queue ...\n", msg);
 
     }
 
@@ -114,7 +125,7 @@ void log_update_hndlr(char * cmd) {
 
     char * cmd_str = (char *) cmd;
     char new_cmd[MSG_SIZE];
-    sprintf(new_cmd, "%d,%s\0",(int)APPENDENTRIES_MSG, cmd_str);
+    sprintf(new_cmd, "%d,%s%c",(int)APPENDENTRIES_MSG, cmd_str, '\0');
     //send_msg(self.sender_sock_fd, new_cmd, &self.s_addr);
     puts("the msg was sent!\n");
     printf("%s was sent", new_cmd);
@@ -178,7 +189,7 @@ void send_vote(unsigned int term)
 
 void vote_req_hndlr(char * p)
 {
-    unsigned int * term = (int *) p;
+    unsigned int * term = (unsigned int *) p;
     if(*term > self.term)
     {
 
@@ -199,10 +210,9 @@ void vote_req_hndlr(char * p)
 }
 
 /* leader become a follower in the new higher term*/
-void node_stepdown(int term)
+void node_stepdown()
 {
     self.node_state = FOLLOWER;
-    self.term = term;
     self.election_timer_interval = GEN_ELECTION_TIMER;
 
     // number of received votes
@@ -214,73 +224,19 @@ void node_stepdown(int term)
 
 void l_vote_req_hndlr(char * p)
 {
-    unsigned int * term = (int *) p;
+    unsigned int * term = (unsigned int *) p;
     if(*term > self.term)
     {
         // leader has to step down
-        node_stepdown(*term);
+        self.term = *term;
+        node_stepdown();
 
         //vote for higher term
         send_vote(*term);
     }
 }
 
-void rollback_uncommitted()
-{
 
-    int i = self.log_len -1;
-    while(i>=0 && !self.log[i].has_commited && self.log[i].term < self.term)
-    {
-        self.log_len--;
-        i--;
-    }
-}
-
-
-
-int append_entry_msg_hndlr(appendentries_msg_t * ae_msg)
-{
-
-    int has_new_leader = 0;
-    if(ae_msg->msg_term < self.term)
-    {
-        // ignore messages from old leader
-        return -1;
-    }
-
-    if(ae_msg->msg_term > self.term) {
-
-        // new leader has elected
-        has_new_leader = 1;
-        self.term = ae_msg->msg_term;
-
-        // rollback uncommitted log entries
-        rollback_uncommitted();
-    }
-
-    // send ack message in format :
-    // <type = 'A'> <term>
-    char msg[RAFT_MSG_SIZE];
-    msg[0] = 'A';
-    sprintf(msg+1, "%d", self.term);
-
-    //send ACK
-    self.l_addr.sin_addr.s_addr = inet_addr(ae_msg->msg_src_ip);
-    send_msg(self.listener_sock_fd, msg, &self.l_addr);
-
-    if(ae_msg->msg_type != HEARTBEAT)
-    {
-        // add to log
-        log_entry_t new_entry;
-        new_entry.term = self.term;
-        new_entry.type = ae_msg->msg_type;
-        strcpy(new_entry.key, ae_msg->key);
-        strcpy(new_entry.value, ae_msg->value);
-        new_entry.has_commited = 0;
-
-        self.log[self.log_len] = new_entry;
-        self.log_len++;
-    }
-
-    // restart timer
+void vote_hndlr(char * cmd) {
+    
 }

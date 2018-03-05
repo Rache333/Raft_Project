@@ -12,7 +12,7 @@ int delete_cmd(char * key) {
 
     mqd_t mq;
     char * str;
-    sprintf(str, "%d,%d,%s\0",(int)LOG_UPDATE, (int)UPDATE_DELETE, key);
+    sprintf(str, "%d,%d,%s%c",(int)LOG_UPDATE, (int)UPDATE_DELETE, key, '\0');
     /* open the mail queue */
     mq = mq_open("Event queue", O_WRONLY);
     mq_send(mq, str, sizeof(str), 0);
@@ -29,7 +29,7 @@ int edit_cmd(char* key, char* value) {
 
     mqd_t mq;
     char * str;
-    sprintf(str, "%d,%d,%s,%s\0",(int)LOG_UPDATE, (int)UPDATE_EDIT, key, value);
+    sprintf(str, "%d,%d,%s,%s%c",(int)LOG_UPDATE, (int)UPDATE_EDIT, key, value, '\0');
     /* open the mail queue */
     mq = mq_open("/Event queue", O_WRONLY);
     mq_send(mq, str, sizeof(str), 0);

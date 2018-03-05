@@ -78,12 +78,6 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/ubuntu/CLionProjects/raft2/a.c">
-			<Option target="raft2"/>
-		</Unit>
-		<Unit filename="/home/ubuntu/CLionProjects/raft2/a.h">
-			<Option target="raft2"/>
-		</Unit>
 		<Unit filename="/home/ubuntu/CLionProjects/raft2/election.c">
 			<Option target="raft2"/>
 		</Unit>

@@ -19,7 +19,7 @@
 #include <netinet/in.h>
 #include <signal.h>
 #include "multicast_handling.h"
-//#include "logreplication.h"
+#include <time.h>
 
 
 #define NODE_N 4
@@ -41,10 +41,10 @@ typedef struct msg {
 
 } msg_t;
 
-void follower_msg_hndlr(char * msg);
-void candidate_msg_hndlr(char * msg);
-void leader_msg_hndlr(char * msg);
-void msg_ack_hndlr(char * msg);
+void follower_msg_hndlr(char * cmd);
+void candidate_msg_hndlr(char * cmd);
+void leader_msg_hndlr(char * cmd);
+void msg_ack_hndlr(char * cmd);
 
 typedef int (* msg_handler_t)(msg_t);
 
@@ -101,7 +101,7 @@ typedef struct log_entries
 
 typedef struct node_modes {
     state_t node_state;
-    unsigned int term;
+    int term;
     int election_timer_interval;
 
     int vote_count;
@@ -149,16 +149,17 @@ typedef struct callback_types {
 } callback_types_t;
 
 node_mode_t self;
-void run(void *);
+void * run(void *);
 void node_init();
-void listen_to_msgs();
+void * listen_to_msgs(void *);
 void send_appendentries(struct appendentries_msgs);
 void commit(struct appendentries_msgs, int accepted);
 
 void election_timeout_hndlr(char * cmd);
-void vote_req_hndlr(char * p);
-void l_vote_req_hndlr(char * p);
-void log_update_hndlr(char * p);
+void vote_req_hndlr(char * cmd);
+void l_vote_req_hndlr(char * cmd);
+void vote_hndlr(char * cmd);
+void log_update_hndlr(char * cmd);
 
 void f_append_entry_msg_hndlr(char * p);
 void c_append_entry_msg_hndlr(char * p);
@@ -168,6 +169,7 @@ void update_add_hndlr(char * p);
 void update_edit_hndlr(char * p);
 void update_delete_hndlr(char * p);
 
+void node_stepdown();
 
 static event_handler_t event_handlers[STATE_N][EVENT_N] = {
         [FOLLOWER][ELECTION_TIMEOUT] = election_timeout_hndlr,
@@ -176,6 +178,8 @@ static event_handler_t event_handlers[STATE_N][EVENT_N] = {
         [FOLLOWER][VOTE_REQUEST] = vote_req_hndlr,
         [CANDIDATE][VOTE_REQUEST] = vote_req_hndlr,
         [LEADER][VOTE_REQUEST] = l_vote_req_hndlr,
+
+        [CANDIDATE][VOTE] = vote_hndlr,
 
         [FOLLOWER][APPENDENTRIES_MSG] = follower_msg_hndlr,
         [CANDIDATE][APPENDENTRIES_MSG] = candidate_msg_hndlr,

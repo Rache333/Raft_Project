@@ -45,7 +45,7 @@ void send_ack_msg(int type, char * ip, int index)
     sprintf(ack_msg, "%d,%d,%d,%d", APPENDENTRIES_MSG_ACK, type, self.term, index);
 
     //send ACK
-    strcpy((char *)self.l_addr.sin_addr.s_addr,ip);
+    self.l_addr.sin_addr.s_addr = inet_addr(ip);
     send_msg(self.listener_sock_fd, ack_msg, &self.l_addr);
 }
 
@@ -82,18 +82,6 @@ void candidate_msg_hndlr(char * msg)
         self.node_state = FOLLOWER;
     }
     // restart timer
-}
-
-/* leader become a follower in the new higher term*/
-void node_stepdown()
-{
-    self.node_state = FOLLOWER;
-    self.election_timer_interval = GEN_ELECTION_TIMER;
-
-    // number of received votes
-    self.vote_count = 0;
-
-    //start timer
 }
 
 void leader_msg_hndlr(char * msg)

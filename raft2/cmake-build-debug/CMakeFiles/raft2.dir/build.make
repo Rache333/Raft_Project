@@ -81,33 +81,9 @@ CMakeFiles/raft2.dir/election.c.o.provides: CMakeFiles/raft2.dir/election.c.o.re
 CMakeFiles/raft2.dir/election.c.o.provides.build: CMakeFiles/raft2.dir/election.c.o
 
 
-CMakeFiles/raft2.dir/logreplication.c.o: CMakeFiles/raft2.dir/flags.make
-CMakeFiles/raft2.dir/logreplication.c.o: ../logreplication.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/CLionProjects/raft2/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/raft2.dir/logreplication.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/raft2.dir/logreplication.c.o   -c /home/ubuntu/CLionProjects/raft2/logreplication.c
-
-CMakeFiles/raft2.dir/logreplication.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/raft2.dir/logreplication.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ubuntu/CLionProjects/raft2/logreplication.c > CMakeFiles/raft2.dir/logreplication.c.i
-
-CMakeFiles/raft2.dir/logreplication.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/raft2.dir/logreplication.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ubuntu/CLionProjects/raft2/logreplication.c -o CMakeFiles/raft2.dir/logreplication.c.s
-
-CMakeFiles/raft2.dir/logreplication.c.o.requires:
-
-.PHONY : CMakeFiles/raft2.dir/logreplication.c.o.requires
-
-CMakeFiles/raft2.dir/logreplication.c.o.provides: CMakeFiles/raft2.dir/logreplication.c.o.requires
-	$(MAKE) -f CMakeFiles/raft2.dir/build.make CMakeFiles/raft2.dir/logreplication.c.o.provides.build
-.PHONY : CMakeFiles/raft2.dir/logreplication.c.o.provides
-
-CMakeFiles/raft2.dir/logreplication.c.o.provides.build: CMakeFiles/raft2.dir/logreplication.c.o
-
-
 CMakeFiles/raft2.dir/logupdatecommands.c.o: CMakeFiles/raft2.dir/flags.make
 CMakeFiles/raft2.dir/logupdatecommands.c.o: ../logupdatecommands.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/CLionProjects/raft2/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/raft2.dir/logupdatecommands.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/CLionProjects/raft2/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/raft2.dir/logupdatecommands.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/raft2.dir/logupdatecommands.c.o   -c /home/ubuntu/CLionProjects/raft2/logupdatecommands.c
 
 CMakeFiles/raft2.dir/logupdatecommands.c.i: cmake_force
@@ -131,7 +107,7 @@ CMakeFiles/raft2.dir/logupdatecommands.c.o.provides.build: CMakeFiles/raft2.dir/
 
 CMakeFiles/raft2.dir/multicast_handling.c.o: CMakeFiles/raft2.dir/flags.make
 CMakeFiles/raft2.dir/multicast_handling.c.o: ../multicast_handling.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/CLionProjects/raft2/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/raft2.dir/multicast_handling.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/CLionProjects/raft2/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/raft2.dir/multicast_handling.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/raft2.dir/multicast_handling.c.o   -c /home/ubuntu/CLionProjects/raft2/multicast_handling.c
 
 CMakeFiles/raft2.dir/multicast_handling.c.i: cmake_force
@@ -155,7 +131,7 @@ CMakeFiles/raft2.dir/multicast_handling.c.o.provides.build: CMakeFiles/raft2.dir
 
 CMakeFiles/raft2.dir/raft.c.o: CMakeFiles/raft2.dir/flags.make
 CMakeFiles/raft2.dir/raft.c.o: ../raft.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/CLionProjects/raft2/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/raft2.dir/raft.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/CLionProjects/raft2/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/raft2.dir/raft.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/raft2.dir/raft.c.o   -c /home/ubuntu/CLionProjects/raft2/raft.c
 
 CMakeFiles/raft2.dir/raft.c.i: cmake_force
@@ -177,51 +153,49 @@ CMakeFiles/raft2.dir/raft.c.o.provides: CMakeFiles/raft2.dir/raft.c.o.requires
 CMakeFiles/raft2.dir/raft.c.o.provides.build: CMakeFiles/raft2.dir/raft.c.o
 
 
-CMakeFiles/raft2.dir/a.c.o: CMakeFiles/raft2.dir/flags.make
-CMakeFiles/raft2.dir/a.c.o: ../a.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/CLionProjects/raft2/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/raft2.dir/a.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/raft2.dir/a.c.o   -c /home/ubuntu/CLionProjects/raft2/a.c
+CMakeFiles/raft2.dir/logreplication.c.o: CMakeFiles/raft2.dir/flags.make
+CMakeFiles/raft2.dir/logreplication.c.o: ../logreplication.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/CLionProjects/raft2/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/raft2.dir/logreplication.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/raft2.dir/logreplication.c.o   -c /home/ubuntu/CLionProjects/raft2/logreplication.c
 
-CMakeFiles/raft2.dir/a.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/raft2.dir/a.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ubuntu/CLionProjects/raft2/a.c > CMakeFiles/raft2.dir/a.c.i
+CMakeFiles/raft2.dir/logreplication.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/raft2.dir/logreplication.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ubuntu/CLionProjects/raft2/logreplication.c > CMakeFiles/raft2.dir/logreplication.c.i
 
-CMakeFiles/raft2.dir/a.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/raft2.dir/a.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ubuntu/CLionProjects/raft2/a.c -o CMakeFiles/raft2.dir/a.c.s
+CMakeFiles/raft2.dir/logreplication.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/raft2.dir/logreplication.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ubuntu/CLionProjects/raft2/logreplication.c -o CMakeFiles/raft2.dir/logreplication.c.s
 
-CMakeFiles/raft2.dir/a.c.o.requires:
+CMakeFiles/raft2.dir/logreplication.c.o.requires:
 
-.PHONY : CMakeFiles/raft2.dir/a.c.o.requires
+.PHONY : CMakeFiles/raft2.dir/logreplication.c.o.requires
 
-CMakeFiles/raft2.dir/a.c.o.provides: CMakeFiles/raft2.dir/a.c.o.requires
-	$(MAKE) -f CMakeFiles/raft2.dir/build.make CMakeFiles/raft2.dir/a.c.o.provides.build
-.PHONY : CMakeFiles/raft2.dir/a.c.o.provides
+CMakeFiles/raft2.dir/logreplication.c.o.provides: CMakeFiles/raft2.dir/logreplication.c.o.requires
+	$(MAKE) -f CMakeFiles/raft2.dir/build.make CMakeFiles/raft2.dir/logreplication.c.o.provides.build
+.PHONY : CMakeFiles/raft2.dir/logreplication.c.o.provides
 
-CMakeFiles/raft2.dir/a.c.o.provides.build: CMakeFiles/raft2.dir/a.c.o
+CMakeFiles/raft2.dir/logreplication.c.o.provides.build: CMakeFiles/raft2.dir/logreplication.c.o
 
 
 # Object files for target raft2
 raft2_OBJECTS = \
 "CMakeFiles/raft2.dir/election.c.o" \
-"CMakeFiles/raft2.dir/logreplication.c.o" \
 "CMakeFiles/raft2.dir/logupdatecommands.c.o" \
 "CMakeFiles/raft2.dir/multicast_handling.c.o" \
 "CMakeFiles/raft2.dir/raft.c.o" \
-"CMakeFiles/raft2.dir/a.c.o"
+"CMakeFiles/raft2.dir/logreplication.c.o"
 
 # External object files for target raft2
 raft2_EXTERNAL_OBJECTS =
 
 libraft2.a: CMakeFiles/raft2.dir/election.c.o
-libraft2.a: CMakeFiles/raft2.dir/logreplication.c.o
 libraft2.a: CMakeFiles/raft2.dir/logupdatecommands.c.o
 libraft2.a: CMakeFiles/raft2.dir/multicast_handling.c.o
 libraft2.a: CMakeFiles/raft2.dir/raft.c.o
-libraft2.a: CMakeFiles/raft2.dir/a.c.o
+libraft2.a: CMakeFiles/raft2.dir/logreplication.c.o
 libraft2.a: CMakeFiles/raft2.dir/build.make
 libraft2.a: CMakeFiles/raft2.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ubuntu/CLionProjects/raft2/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking C static library libraft2.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ubuntu/CLionProjects/raft2/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking C static library libraft2.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/raft2.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/raft2.dir/link.txt --verbose=$(VERBOSE)
 
@@ -231,11 +205,10 @@ CMakeFiles/raft2.dir/build: libraft2.a
 .PHONY : CMakeFiles/raft2.dir/build
 
 CMakeFiles/raft2.dir/requires: CMakeFiles/raft2.dir/election.c.o.requires
-CMakeFiles/raft2.dir/requires: CMakeFiles/raft2.dir/logreplication.c.o.requires
 CMakeFiles/raft2.dir/requires: CMakeFiles/raft2.dir/logupdatecommands.c.o.requires
 CMakeFiles/raft2.dir/requires: CMakeFiles/raft2.dir/multicast_handling.c.o.requires
 CMakeFiles/raft2.dir/requires: CMakeFiles/raft2.dir/raft.c.o.requires
-CMakeFiles/raft2.dir/requires: CMakeFiles/raft2.dir/a.c.o.requires
+CMakeFiles/raft2.dir/requires: CMakeFiles/raft2.dir/logreplication.c.o.requires
 
 .PHONY : CMakeFiles/raft2.dir/requires
 
